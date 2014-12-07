@@ -1,0 +1,38 @@
+{
+  "name": "webkit-opener",
+  "version": "0.0.0",
+  "description": "Open a URL with a webkit browser available, preferably default browser of the user",
+  "author": "Jakub Gieryluk <jakub.g.opensource@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/jakub-g/webkit-opener",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jakub-g/webkit-opener.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jakub-g/webkit-opener/issues"
+  },
+  "bin": "bin/webkit-opener.js",
+  "main": "index.js",
+  "scripts": {
+    "lint": "jshint index.js",
+    "test": "npm run lint"
+  },
+  "keywords": [
+    "windows",
+    "ubuntu",
+    "linux",
+    "webkit",
+    "browser",
+    "opener",
+    "launcher"
+  ],
+  "devDependencies": {
+    "jshint": "2.5.10"
+  },
+  "dependencies": {
+    "browser-launcher2": "0.4.4",
+    "default-browser-winlin": "0.1.0",
+    "opener": "1.4.0"
+  }
+}
