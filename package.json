@@ -1,38 +1,42 @@
 {
-  "name": "webkit-opener",
+  "name": "biased-opener",
   "version": "0.1.0",
-  "description": "Open a URL with a webkit browser available, preferably default browser of the user",
+  "description": "Cross-platform, opens a URL with one of the browsers passed as parameter (if available in the system), preferably default browser of the user",
   "author": "Jakub Gieryluk <jakub.g.opensource@gmail.com>",
   "license": "MIT",
-  "homepage": "https://github.com/jakub-g/webkit-opener",
+  "homepage": "https://github.com/jakub-g/biased-opener",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jakub-g/webkit-opener.git"
+    "url": "https://github.com/jakub-g/biased-opener.git"
   },
   "bugs": {
-    "url": "https://github.com/jakub-g/webkit-opener/issues"
+    "url": "https://github.com/jakub-g/biased-opener/issues"
   },
-  "bin": "bin/webkit-opener.js",
+  "bin": "bin/biased-opener.js",
   "main": "index.js",
   "scripts": {
     "lint": "jshint index.js",
     "test": "npm run lint"
   },
   "keywords": [
+    "browser",
+    "opener",
+    "launcher",
     "windows",
     "ubuntu",
     "linux",
-    "webkit",
-    "browser",
-    "opener",
-    "launcher"
+    "macos",
+    "macosx",
+    "biased",
+    "webkit"
   ],
   "devDependencies": {
     "jshint": "2.5.10"
   },
   "dependencies": {
     "browser-launcher2": "0.4.4",
-    "default-browser-winlin": "0.1.0",
-    "opener": "1.4.0"
+    "minimist": "1.1.0",
+    "opener": "1.4.0",
+    "x-default-browser": "0.3.0"
   }
 }
