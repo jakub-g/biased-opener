@@ -8,6 +8,7 @@ function printUsage() {
     console.error("       biased-opener [--browsers|-b] 'chrome, chromium, opera' <url>");
     console.error("       biased-opener [--verbose|-v] -- <url>");
     console.error("       biased-opener [--help|-h]");
+    console.error("       biased-opener --version");
     process.exit(1);
 }
 
@@ -25,6 +26,10 @@ function processBrowsers (browsers) {
 }
 
 function main () {
+    if (argv['version']) {
+        console.log( require('../package.json').version );
+        return;
+    }
 
     var help = argv['help'] || argv['h'];
     var verbose = argv['verbose'] || argv['v'];
