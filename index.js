@@ -115,7 +115,7 @@ module.exports = function (url, cfg, cb) {
             // console.dir(preferredBrowsers);
 
             if (availableBrowsers.length === 0) {
-                var msg = 'No browser matching [' + preferredBrowsers.toString() + ']  found in the system! If this is not true, submit a bug report on https://github.com/benderjs/browser-launcher2';
+                var msg = 'No browser matching [' + preferredBrowsers.toString() + '] found in the system! If this is not true, submit a bug report on https://github.com/benderjs/browser-launcher2';
                 if (cfg.verbose){
                     console.log(msg);
                 }
