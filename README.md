@@ -1,16 +1,15 @@
-# webkit-opener
- [![Build Status](https://secure.travis-ci.org/jakub-g/webkit-opener.png)](http://travis-ci.org/jakub-g/webkit-opener)
+# biased-opener
+ [![Build Status](https://secure.travis-ci.org/jakub-g/biased-opener.png)](http://travis-ci.org/jakub-g/biased-opener)
 
- [![Get it on npm](https://nodei.co/npm/webkit-opener.png?compact=true)](https://www.npmjs.org/package/webkit-opener)
+ [![Get it on npm](https://nodei.co/npm/biased-opener.png?compact=true)](https://www.npmjs.org/package/biased-opener)
 
 
-This module tries to open the provided URL in some webkit-based browser available on the machine.
-It prefers the default browser of the user (as long as it's webkit), otherwise, it tries
-Chrome, Opera, Chromium in that order.
+This module tries to open the provided URL in some of the user-supplied browsers available on the machine.
+It prefers the default browser of the user, otherwise it tries all other browsers in the order in which they were passed.
 
-If no webkit browsers found, it doesn't launch anything, just calls the callback with an error.
+If no conforming browsers found, it doesn't launch anything, just calls the callback with an error.
 
-Tested on Windows 7 64-bit, Windows XP 32-bit, Ubuntu 14.04 64-bit (en-US locale).
+Tested on Windows 7 64-bit, Windows XP 32-bit, Ubuntu 14.04 64-bit, Mac OS X 10.10 (en-US locale).
 
 It requires nodejs and npm. If you don't have node, grab it at [nodejs.org](https://nodejs.org).
 Node installer bundles npm (node package manager)
@@ -25,18 +24,21 @@ about the error instead of opening the URL in unsupported browser.
 ## Usage as a nodejs module
 
 ```sh
-$ npm install webkit-opener
+$ npm install biased-opener
 ```
 
 ```js
-var webkitOpener = require('webkit-opener');
+var biasedOpener = require('biased-opener');
 
 var url = "http://example.org";
-var verbose = true;
+var cfg = {
+  verbose: true,
+  preferredBrowsers: "chrome, opera"
+};
 
-webkitOpener(url, {verbose:verbose}, function(err) {
+webkitOpener(url, cfg, function(err) {
     if (err) {
-        // didn't find any webkit browser, or there was some failure while launching it
+        // didn't find any matching browser, or there was some failure while launching it
     }
 });
 ```
@@ -45,8 +47,9 @@ webkitOpener(url, {verbose:verbose}, function(err) {
 ## Usage from command line
 
 ```sh
-$ npm install -g webkit-opener
-$ webkit-opener --verbose http://example.org
+$ npm install -g biased-opener
+$ biased-opener -h                             # to see all the options
+$ biased-opener --verbose --browser 'chrome, opera' 'http://example.org'
 ```
 
 
@@ -58,7 +61,7 @@ Use GitHub issues or email: (jakub.g.opensource) (gmail)
 
 ## License
 
-MIT © [Jakub Gieryluk](http://jakub-g.github.io)
+MIT Â© [Jakub Gieryluk](http://jakub-g.github.io)
 
 
 ## Related projects
