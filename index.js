@@ -17,7 +17,7 @@ function getBrowserFilter (preferredBrowsers) {
 /**
  * @param Array<String> preferredBrowsers
  * @param Array<Object{name, version, type, command}> availableBrowsers
- * @return String: "chrome", "opera" or "chromium" or null
+ * @return String: e.g. "chrome", "opera" or "chromium" or null
  */
 function getBrowserCommand (preferredBrowsers, availableBrowsers) {
     var filterFunc = function(browserName) {
@@ -52,6 +52,23 @@ function isDefaultBrowserGoodEnough (commonName, preferredBrowsers) {
 }
 
 /**
+ * Converts the browsers passed as a string to an array
+ * @param {Array<String>|String|null} browsers Comma-separated string with browser names
+ * @return {Array<String>|null}
+ */
+function convertBrowsersToArray (browsers) {
+    if (!browsers) {
+        return null;
+    }
+    if (isArray(browsers)) {
+        return browsers;
+    }
+
+    // allow "a,b,c" and "a, b, c" with spaces
+    return browsers.replace(/ /g, '').split(',');
+}
+
+/**
  * Opens a URL in some preferred browser if available, and calls the callback.
  * The priority is given to the user's default browser (if it's on the preferred
  * browsers list), then to the first found browser from the list.
@@ -71,9 +88,9 @@ module.exports = function (url, cfg, cb) {
     cb = cb || (function (err) {
         if (err) console.error(err);
     });
-    var preferredBrowsers = cfg.preferredBrowsers;
+    var preferredBrowsers = convertBrowsersToArray(cfg.preferredBrowsers);
     if (!isArray(preferredBrowsers)) {
-        return cb(new Error("preferredBrowsers has to be an array"));
+        return cb(new Error("preferredBrowsers has to be an array or a comma-delimited string"));
     }
 
     checkDefaultBrowser(function(err, browserInfo) {

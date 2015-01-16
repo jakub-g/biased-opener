@@ -33,10 +33,11 @@ var biasedOpener = require('biased-opener');
 var url = "http://example.org";
 var cfg = {
   verbose: true,
-  preferredBrowsers: "chrome, opera"
+  preferredBrowsers: ['chrome', 'opera'] // comma-delimited string "chrome, opera" is also accepted
 };
+// if `cfg` is not passed, it defaults to `{ verbose: false, preferredBrowsers: ['chrome'] }`
 
-webkitOpener(url, cfg, function(err) {
+biasedOpener(url, cfg, function(err) {
     if (err) {
         // didn't find any matching browser, or there was some failure while launching it
     }
@@ -52,6 +53,7 @@ $ biased-opener -h                             # to see all the options
 $ biased-opener --verbose --browsers 'chrome, opera' 'http://example.org'
 ```
 
+If `--browsers` is not passed, it defaults to `chrome`.
 
 ## Linux support
 
