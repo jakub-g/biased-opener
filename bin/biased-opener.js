@@ -5,7 +5,7 @@ var argv = require('minimist')(process.argv.slice(2));
 
 function printUsage() {
     console.error("Usage: biased-opener <url>");
-    console.error("       biased-opener [--browsers|-b] 'chrome, chromium, opera' <url>");
+    console.error("       biased-opener [--browsers|--browser|-b] 'chrome, chromium, opera' <url>");
     console.error("       biased-opener [--verbose|-v] -- <url>");
     console.error("       biased-opener [--help|-h]");
     console.error("       biased-opener --version");
@@ -34,7 +34,7 @@ function main () {
     var help = argv['help'] || argv['h'];
     var verbose = argv['verbose'] || argv['v'];
     var url = argv._[0];
-    var preferredBrowsers = processBrowsers(argv['browsers'] || argv['b']) || ['chrome'];
+    var preferredBrowsers = processBrowsers(argv['browsers'] || argv['browser'] || argv['b']) || ['chrome'];
 
     if (help || !url) {
         printUsage();

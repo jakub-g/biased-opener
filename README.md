@@ -49,7 +49,7 @@ webkitOpener(url, cfg, function(err) {
 ```sh
 $ npm install -g biased-opener
 $ biased-opener -h                             # to see all the options
-$ biased-opener --verbose --browser 'chrome, opera' 'http://example.org'
+$ biased-opener --verbose --browsers 'chrome, opera' 'http://example.org'
 ```
 
 
