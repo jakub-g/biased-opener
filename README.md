@@ -1,5 +1,5 @@
 # biased-opener
- [![Build Status](https://secure.travis-ci.org/jakub-g/biased-opener.png)](http://travis-ci.org/jakub-g/biased-opener)
+ [![Build Status](https://secure.travis-ci.org/jakub-g/biased-opener.png?branch=master)](http://travis-ci.org/jakub-g/biased-opener)
 
  [![Get it on npm](https://nodei.co/npm/biased-opener.png?compact=true)](https://www.npmjs.org/package/biased-opener)
 
