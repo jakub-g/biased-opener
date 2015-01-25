@@ -55,6 +55,16 @@ $ biased-opener --verbose --browsers 'chrome, opera' 'http://example.org'
 
 If `--browsers` is not passed, it defaults to `chrome`.
 
+## Recognized browsers
+
+- `chrome`
+- `chromium`
+- `opera`
+- `firefox`
+- `safari`
+- `ie`
+
+
 ## Linux support
 
 This module was only tested on Ubuntu. Compatibility reports and fixes for other distros are more than welcome!
