@@ -43,6 +43,46 @@ function useOpener (url, cb) {
     opener(url, cb);
 }
 
+function useBrowserLauncher(url, cfg, cb) {
+    var launcher = require('browser-launcher2');
+    launcher.detect(function(availableBrowsers) {
+        availableBrowsers = availableBrowsers.filter(getBrowserFilter(cfg.preferredBrowsers));
+        // console.dir(availableBrowsers);
+        // console.dir(cfg.preferredBrowsers);
+
+        if (availableBrowsers.length === 0) {
+            var msg = 'No browser matching [' + cfg.preferredBrowsers.toString() + '] found in the system! If this is not true, submit a bug report on https://github.com/benderjs/browser-launcher2';
+            if (cfg.verbose){
+                console.log(msg);
+            }
+            return cb(new Error(msg));
+        }
+
+        // choose from available browsers in order of preference
+        var command = getBrowserCommand(cfg.preferredBrowsers, availableBrowsers);
+        launcher(function(err, launch) {
+            // checking err makes sense only when passing config, no need to do it here
+            launch(url, command, function(err, instance) {
+                if (err) {
+                    var msg = 'Unable to start the executable of ' + command;
+                    if (cfg.verbose){
+                        console.log(msg);
+                    }
+                    cb(new Error(msg));
+                }
+                if (cfg.verbose) {
+                    console.log('Browser ' + command + ' started with PID:', instance.pid);
+                    instance.on('stop', function(code) {
+                        console.log('Instance stopped with exit code:', code);
+                    });
+                }
+                cb(null, 'Started ' + command + ' successfully');
+            });
+        });
+
+    });
+}
+
 function isArray (value) {
     return Object.prototype.toString.apply(value) === "[object Array]";
 }
@@ -121,44 +161,4 @@ module.exports = function (url, cfg, cb) {
             return useBrowserLauncher(url, cfg, cb);
         }
     });
-
-    function useBrowserLauncher(url, cfg, cb) {
-        var launcher = require('browser-launcher2');
-        launcher.detect(function(availableBrowsers) {
-            availableBrowsers = availableBrowsers.filter(getBrowserFilter(cfg.preferredBrowsers));
-            // console.dir(availableBrowsers);
-            // console.dir(cfg.preferredBrowsers);
-
-            if (availableBrowsers.length === 0) {
-                var msg = 'No browser matching [' + cfg.preferredBrowsers.toString() + '] found in the system! If this is not true, submit a bug report on https://github.com/benderjs/browser-launcher2';
-                if (cfg.verbose){
-                    console.log(msg);
-                }
-                return cb(new Error(msg));
-            }
-
-            // choose from available browsers in order of preference
-            var command = getBrowserCommand(cfg.preferredBrowsers, availableBrowsers);
-            launcher(function(err, launch) {
-                // checking err makes sense only when passing config, no need to do it here
-                launch(url, command, function(err, instance) {
-                    if (err) {
-                        var msg = 'Unable to start the executable of ' + command;
-                        if (cfg.verbose){
-                            console.log(msg);
-                        }
-                        cb(new Error(msg));
-                    }
-                    if (cfg.verbose) {
-                        console.log('Browser ' + command + ' started with PID:', instance.pid);
-                        instance.on('stop', function(code) {
-                            console.log('Instance stopped with exit code:', code);
-                        });
-                    }
-                    cb(null, 'Started ' + command + ' successfully');
-                });
-            });
-
-        });
-    }
 };
