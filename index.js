@@ -94,23 +94,35 @@ module.exports = function (url, cfg, cb) {
     }
 
     checkDefaultBrowser(function(err, browserInfo) {
+        if (err || !browserInfo || !browserInfo.commonName) {
+            // error when checking for default browser, but browser launcher may work fine
+            // the situation when err == null and browserInfo.commonName is undefined should not happen,
+            // but let's be defensive here
+            if (err && cfg.verbose) {
+                console.log('x-default-browser error: ' + err);
+                console.log('Trying to use browser-launcher2...');
+            }
+            return useBrowserLauncher(url, cfg, cb);
+        }
+
         var goodEnough = isDefaultBrowserGoodEnough(browserInfo.commonName, cfg.preferredBrowsers);
-        if (!err && goodEnough) {
+        if (goodEnough) {
             // great, default browser is good, let's use opener to open the URL with that browser
             if (cfg.verbose) {
                 console.log('Using default browser via opener; it should open ' + browserInfo.commonName);
             }
             return useOpener(url, cb);
+        } else {
+            // default browser is not matching the spec
+            // let's check if we have some spec-conforming browser in the system
+            if (cfg.verbose) {
+                console.log('Default browser is ' + browserInfo.commonName + '; looking further for browsers matching [' + cfg.preferredBrowsers.toString() + ']...');
+            }
+            return useBrowserLauncher(url, cfg, cb);
         }
-        if (cfg.verbose && !goodEnough) {
-            console.log('Default browser is ' + browserInfo.commonName + '; looking further for browsers matching [' + cfg.preferredBrowsers.toString() + ']...');
-        }
-        useBrowserLauncher(url, cfg, cb);
     });
 
     function useBrowserLauncher(url, cfg, cb) {
-        // either we failed checking for default browser, or default browser is not matching the spec
-        // let's check if we have some spec-conforming browser in the system
         var launcher = require('browser-launcher2');
         launcher.detect(function(availableBrowsers) {
             availableBrowsers = availableBrowsers.filter(getBrowserFilter(cfg.preferredBrowsers));
