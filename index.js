@@ -88,13 +88,13 @@ module.exports = function (url, cfg, cb) {
     cb = cb || (function (err) {
         if (err) console.error(err);
     });
-    var preferredBrowsers = convertBrowsersToArray(cfg.preferredBrowsers);
-    if (!isArray(preferredBrowsers)) {
+    cfg.preferredBrowsers = convertBrowsersToArray(cfg.preferredBrowsers);
+    if (!isArray(cfg.preferredBrowsers)) {
         return cb(new Error("preferredBrowsers has to be an array or a comma-delimited string"));
     }
 
     checkDefaultBrowser(function(err, browserInfo) {
-        var goodEnough = isDefaultBrowserGoodEnough(browserInfo.commonName, preferredBrowsers);
+        var goodEnough = isDefaultBrowserGoodEnough(browserInfo.commonName, cfg.preferredBrowsers);
         if (!err && goodEnough) {
             // great, default browser is good, let's use opener to open the URL with that browser
             if (cfg.verbose) {
@@ -103,19 +103,22 @@ module.exports = function (url, cfg, cb) {
             return useOpener(url, cb);
         }
         if (cfg.verbose && !goodEnough) {
-            console.log('Default browser is ' + browserInfo.commonName + '; looking further for browsers matching [' + preferredBrowsers.toString() + ']...');
+            console.log('Default browser is ' + browserInfo.commonName + '; looking further for browsers matching [' + cfg.preferredBrowsers.toString() + ']...');
         }
+        useBrowserLauncher(url, cfg, cb);
+    });
 
+    function useBrowserLauncher(url, cfg, cb) {
         // either we failed checking for default browser, or default browser is not matching the spec
         // let's check if we have some spec-conforming browser in the system
         var launcher = require('browser-launcher2');
         launcher.detect(function(availableBrowsers) {
-            availableBrowsers = availableBrowsers.filter(getBrowserFilter(preferredBrowsers));
+            availableBrowsers = availableBrowsers.filter(getBrowserFilter(cfg.preferredBrowsers));
             // console.dir(availableBrowsers);
-            // console.dir(preferredBrowsers);
+            // console.dir(cfg.preferredBrowsers);
 
             if (availableBrowsers.length === 0) {
-                var msg = 'No browser matching [' + preferredBrowsers.toString() + '] found in the system! If this is not true, submit a bug report on https://github.com/benderjs/browser-launcher2';
+                var msg = 'No browser matching [' + cfg.preferredBrowsers.toString() + '] found in the system! If this is not true, submit a bug report on https://github.com/benderjs/browser-launcher2';
                 if (cfg.verbose){
                     console.log(msg);
                 }
@@ -123,7 +126,7 @@ module.exports = function (url, cfg, cb) {
             }
 
             // choose from available browsers in order of preference
-            var command = getBrowserCommand(preferredBrowsers, availableBrowsers);
+            var command = getBrowserCommand(cfg.preferredBrowsers, availableBrowsers);
             launcher(function(err, launch) {
                 // checking err makes sense only when passing config, no need to do it here
                 launch(url, command, function(err, instance) {
@@ -145,5 +148,5 @@ module.exports = function (url, cfg, cb) {
             });
 
         });
-    });
+    }
 };
