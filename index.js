@@ -62,7 +62,11 @@ function useBrowserLauncher(url, cfg, cb) {
         var command = getBrowserCommand(cfg.preferredBrowsers, availableBrowsers);
         launcher(function(err, launch) {
             // checking err makes sense only when passing config, no need to do it here
-            launch(url, command, function(err, instance) {
+            var launchCfg = {
+                browser: command,
+                detached: true // do not block the shell when opening using biased-opener from command line
+            };
+            launch(url, launchCfg, function(err, instance) {
                 if (err) {
                     var msg = 'Unable to start the executable of ' + command;
                     if (cfg.verbose){
@@ -75,6 +79,12 @@ function useBrowserLauncher(url, cfg, cb) {
                     instance.on('stop', function(code) {
                         console.log('Instance stopped with exit code:', code);
                     });
+                }
+                if (instance) {
+                    instance.process.stdin.unref();
+                    instance.stdout.unref();
+                    instance.stderr.unref();
+                    instance.process.unref();
                 }
                 cb(null, 'Started ' + command + ' successfully');
             });
