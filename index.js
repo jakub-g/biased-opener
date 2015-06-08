@@ -38,11 +38,6 @@ function getBrowserCommand (preferredBrowsers, availableBrowsers) {
     return null;
 }
 
-function useOpener (url, cb) {
-    var opener = require('opener');
-    opener(url, cb);
-}
-
 function useBrowserLauncher(url, cfg, cb) {
     var launcher = require('browser-launcher2');
     launcher.detect(function(availableBrowsers) {
@@ -155,18 +150,25 @@ module.exports = function (url, cfg, cb) {
             return useBrowserLauncher(url, cfg, cb);
         }
 
-        var goodEnough = isDefaultBrowserGoodEnough(browserInfo.commonName, cfg.preferredBrowsers);
+        var defaultBrowserName = browserInfo.commonName;
+        var goodEnough = isDefaultBrowserGoodEnough(defaultBrowserName, cfg.preferredBrowsers);
         if (goodEnough) {
-            // great, default browser is good, let's use opener to open the URL with that browser
-            if (cfg.verbose) {
-                console.log('Using default browser via opener; it should open ' + browserInfo.commonName);
+            // make sure to have default browser as the first one in the preferred browsers array
+            var idx = cfg.preferredBrowsers.indexOf(defaultBrowserName);
+            if (idx > -1) {
+                cfg.preferredBrowsers.splice(idx, 1);
             }
-            return useOpener(url, cb);
+            cfg.preferredBrowsers.unshift(defaultBrowserName);
+
+            if (cfg.verbose) {
+                console.log('Using default browser: ' + defaultBrowserName);
+            }
+            return useBrowserLauncher(url, cfg, cb);
         } else {
             // default browser is not matching the spec
             // let's check if we have some spec-conforming browser in the system
             if (cfg.verbose) {
-                console.log('Default browser is ' + browserInfo.commonName + '; looking further for browsers matching [' + cfg.preferredBrowsers.toString() + ']...');
+                console.log('Default browser is ' + defaultBrowserName + '; looking further for browsers matching [' + cfg.preferredBrowsers.toString() + ']...');
             }
             return useBrowserLauncher(url, cfg, cb);
         }

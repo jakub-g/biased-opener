@@ -36,7 +36,6 @@
   "dependencies": {
     "browser-launcher2": "0.4.5",
     "minimist": "1.1.0",
-    "opener": "1.4.1",
     "x-default-browser": "0.3.0"
   }
 }
