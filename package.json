@@ -34,8 +34,8 @@
     "jshint": "2.5.10"
   },
   "dependencies": {
-    "browser-launcher2": "0.4.5",
-    "minimist": "1.1.0",
-    "x-default-browser": "0.3.0"
+    "browser-launcher2": "~0.4.6",
+    "minimist": "^1.2.0",
+    "x-default-browser": "~0.3.0"
   }
 }
