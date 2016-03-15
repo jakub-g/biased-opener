@@ -37,9 +37,13 @@ var cfg = {
 };
 // if `cfg` is not passed, it defaults to `{ verbose: false, preferredBrowsers: ['chrome'] }`
 
-biasedOpener(url, cfg, function(err) {
+biasedOpener(url, cfg, function(err, okMsg, instance) {
     if (err) {
         // didn't find any matching browser, or there was some failure while launching it
+    }
+    if (instance) {
+        // control the instance if you need it
+        // see https://github.com/benderjs/browser-launcher2#instance
     }
 });
 ```

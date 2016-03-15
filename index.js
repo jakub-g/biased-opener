@@ -123,7 +123,7 @@ function convertBrowsersToArray (browsers) {
  * `cb` defaults (roughly) to console.error
  * @param {String} url
  * @param optional {Object} cfg {verbose: Boolean, preferredBrowsers: Array<String>}
- * @param optional {Function} cb function(error, stdout|okMessage, stderr)
+ * @param optional {Function} cb function(error, okMsg, instance)
  */
 module.exports = function (url, cfg, cb) {
     cfg = cfg || {
