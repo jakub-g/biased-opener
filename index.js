@@ -81,7 +81,7 @@ function useBrowserLauncher(url, cfg, cb) {
                     instance.stderr.unref();
                     instance.process.unref();
                 }
-                cb(null, 'Started ' + command + ' successfully');
+                cb(null, 'Started ' + command + ' successfully', instance);
             });
         });
 
